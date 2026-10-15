@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Barbarastraat 66</title>
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Ons Huis">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0}
+[hidden]{display:none!important}
+/* Layout: iOS-style app — large title, inset grouped lists, bottom tab bar switching five views */
+:root{
+  --bg:#f2f2f7; --card:#ffffff; --fill:#e9e9ee; --label:#000000; --label2:#3c3c4399; --label3:#3c3c434d; --sep:#3c3c4329;
+  --blue:#007aff; --green:#34c759; --orange:#ff9500; --red:#ff3b30; --pink:#ff2d55; --teal:#30b0c7; --indigo:#5856d6;
+  --bar:rgba(249,249,249,.88);
+  --font:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Segoe UI", Roboto, system-ui, sans-serif;
+  --round:ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#000000; --card:#1c1c1e; --fill:#2c2c2e; --label:#ffffff; --label2:#ebebf599; --label3:#ebebf54d; --sep:#54545899;
+  --blue:#0a84ff; --green:#30d158; --orange:#ff9f0a; --red:#ff453a; --pink:#ff375f; --teal:#40c8e0; --indigo:#5e5ce6;
+  --bar:rgba(22,22,24,.88); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#000000; --card:#1c1c1e; --fill:#2c2c2e; --label:#ffffff; --label2:#ebebf599; --label3:#ebebf54d; --sep:#54545899;
+  --blue:#0a84ff; --green:#30d158; --orange:#ff9f0a; --red:#ff453a; --pink:#ff375f; --teal:#40c8e0; --indigo:#5e5ce6;
+  --bar:rgba(22,22,24,.88); color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--label);font-family:var(--font);font-size:17px;line-height:1.35;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px));padding-block:12px 120px}
+h1{font-size:34px;font-weight:700;letter-spacing:.01em;margin:0;line-height:1.15;text-wrap:balance}
+h2{font-size:22px;font-weight:700;margin:0;letter-spacing:.01em}
+.sub{color:var(--label2);font-size:15px;margin:2px 0 0}
+.view{display:flex;flex-direction:column;gap:22px;margin-top:18px}
+.vhead{display:flex;flex-direction:column;gap:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Inset grouped list */
+.group{display:flex;flex-direction:column;gap:6px}
+.ghead{font-size:13px;color:var(--label2);text-transform:uppercase;letter-spacing:.02em;padding:0 16px;display:flex;justify-content:space-between}
+.gfoot{font-size:13px;color:var(--label2);padding:0 16px;margin:0}
+.list{background:var(--card);border-radius:12px;overflow:hidden}
+.row{display:flex;gap:12px;align-items:center;padding:11px 16px;position:relative;min-height:44px}
+.row+.row::before{content:"";position:absolute;top:0;right:0;left:16px;border-top:.5px solid var(--sep)}
+.row.ic+.row::before,.row+.row.ic::before{left:56px}
+.row .main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.row .t{font-size:17px}
+.row .d{font-size:13px;color:var(--label2)}
+.row .v{color:var(--label2);text-align:right;font-variant-numeric:tabular-nums;flex:none}
+.row.done .t{color:var(--label2)}
+.icon{width:30px;height:30px;border-radius:7px;display:grid;place-items:center;flex:none;color:#fff}
+.icon svg{width:18px;height:18px}
+
+/* Round iOS checkbox */
+.cb{appearance:none;-webkit-appearance:none;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--label3);margin:0;flex:none;cursor:pointer;display:grid;place-items:center;transition:background .15s,border-color .15s}
+.cb:checked{background:var(--blue);border-color:var(--blue)}
+.cb:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.2px 2.2px 0;transform:translateY(-1.5px) rotate(45deg)}
+.cb:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,.tab:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.cb:disabled{opacity:.5}
+.row label{cursor:pointer}
+
+/* Pills */
+.pill{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;flex:none;white-space:nowrap}
+.p-green{background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--green)}
+.p-red{background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--red)}
+.p-orange{background:color-mix(in srgb,var(--orange) 18%,transparent);color:var(--orange)}
+.p-blue{background:color-mix(in srgb,var(--blue) 15%,transparent);color:var(--blue)}
+.p-grey{background:var(--fill);color:var(--label2)}
+
+/* Overview: rings + countdowns */
+.hero{background:var(--card);border-radius:16px;padding:18px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.rings{width:132px;height:132px}
+.legend{display:flex;flex-direction:column;gap:10px;min-width:0}
+.lg .k{font-size:13px;color:var(--label2)}
+.lg .n{font-family:var(--round);font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.lg .n small{font-size:15px;font-weight:600;color:var(--label2)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{background:var(--card);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.tile .k{font-size:13px;font-weight:600;display:flex;gap:6px;align-items:center}
+.tile .big{font-family:var(--round);font-size:34px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.tile .big small{font-size:15px;font-weight:600;color:var(--label2);margin-left:4px}
+.tile .d{font-size:13px;color:var(--label2)}
+.nextcard{background:var(--card);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.nextcard .k{font-size:13px;color:var(--label2)}
+.nextcard .t{font-size:17px;font-weight:600}
+.warn{color:var(--red);font-weight:600}
+
+/* Timeline */
+.tl{background:var(--card);border-radius:12px;padding:6px 0;list-style:none;margin:0;position:relative}
+.tl li{display:grid;grid-template-columns:52px 20px 1fr;gap:10px;padding:10px 16px 10px 12px;align-items:start;position:relative}
+.tl .date{font-size:13px;color:var(--label2);text-align:right;line-height:1.2;padding-top:2px;font-variant-numeric:tabular-nums}
+.tl .date b{display:block;font-size:20px;color:var(--label);font-weight:600;font-family:var(--round)}
+.tl .rail{position:relative;height:100%;display:flex;justify-content:center}
+.tl .rail::before{content:"";position:absolute;top:-10px;bottom:-10px;width:2px;background:var(--fill)}
+.tl li:first-child .rail::before{top:10px}.tl li:last-child .rail::before{bottom:calc(100% - 14px)}
+.tl .dot{width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--label3);position:relative;z-index:1;margin-top:5px}
+.tl .body{min-width:0;display:flex;flex-direction:column;gap:3px}
+.tl .t{font-weight:600}
+.tl .meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--label2)}
+.tl .s-done .dot{background:var(--green);border-color:var(--green)}
+.tl .s-done .t{color:var(--label2);font-weight:500}
+.tl .s-late .dot{border-color:var(--red)}
+.tl .s-soon .dot{border-color:var(--orange)}
+.tl .key .t::after{content:"Deadline";font-size:11px;font-weight:700;color:#fff;background:var(--red);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:2px}
+.tl li.today .dot{background:var(--blue);border-color:var(--blue);box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 22%,transparent)}
+.tl li.today .t{color:var(--blue)}
+
+/* Docs table */
+.dhead{display:grid;grid-template-columns:1fr 64px 64px;padding:8px 16px 0;font-size:13px;color:var(--label2);text-transform:uppercase;letter-spacing:.02em}
+.dhead span:not(:first-child){text-align:center}
+.drow{display:grid;grid-template-columns:1fr 64px 64px;align-items:center;padding:11px 16px;position:relative}
+.drow+.drow::before{content:"";position:absolute;top:0;right:0;left:16px;border-top:.5px solid var(--sep)}
+.drow .cbw{display:flex;justify-content:center}
+.drow .main{min-width:0;display:flex;flex-direction:column;gap:2px}
+.drow.done .t{color:var(--label2)}
+.bars{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pbar{height:6px;border-radius:3px;background:var(--fill);overflow:hidden}
+.pbar>span{display:block;height:100%;background:var(--green);border-radius:3px;transition:width .4s}
+
+/* Inputs */
+.field{flex:none;width:118px;font:inherit;font-size:17px;text-align:right;border:0;background:transparent;color:var(--label);padding:4px 0;font-variant-numeric:tabular-nums}
+.field::placeholder{color:var(--label3)}
+.field.wide{width:100%;text-align:left}
+.datein{font:inherit;font-size:17px;border:0;background:var(--fill);color:var(--label);border-radius:8px;padding:5px 8px;flex:none}
+.cost .sugg{font-size:12px;color:var(--label2);text-align:right}
+.cost .right{display:flex;flex-direction:column;align-items:flex-end;gap:0;flex:none}
+.delbtn{background:none;border:0;color:var(--red);font:inherit;font-size:13px;padding:0;cursor:pointer}
+.addbtn{background:none;border:0;color:var(--blue);font:inherit;font-size:17px;padding:0;cursor:pointer;flex:none}
+.switch{appearance:none;-webkit-appearance:none;width:51px;height:31px;border-radius:16px;background:var(--fill);position:relative;flex:none;cursor:pointer;transition:background .2s;margin:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s}
+.switch:checked{background:var(--green)}
+.switch:checked::after{transform:translateX(20px)}
+.sumgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sumgrid .tile .big{font-size:24px}
+.tile.accent{background:color-mix(in srgb,var(--green) 14%,var(--card))}
+.tile.accent .big{color:var(--green)}
+.notes{width:100%;min-height:200px;font:inherit;font-size:17px;border:0;border-radius:12px;background:var(--card);color:var(--label);padding:14px 16px;resize:vertical}
+.info{background:var(--card);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.info .t{font-weight:600;display:flex;gap:10px;align-items:center}
+.info p{margin:0;font-size:15px;color:var(--label2)}
+.info ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px;font-size:15px}
+.callout{border-radius:12px;padding:12px 16px;font-size:15px;background:color-mix(in srgb,var(--orange) 14%,var(--card))}
+.callout b{color:var(--orange)}
+
+/* Tab bar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--bar);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--sep);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tabbar .in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.tab{background:none;border:0;font:inherit;font-size:10px;font-weight:500;color:var(--label2);display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0 6px;cursor:pointer}
+.tab svg{width:26px;height:26px}
+.tab[aria-selected="true"]{color:var(--blue)}
+.sync{font-size:12px;color:var(--label2);text-align:center;margin-top:28px}
+@media (max-width:400px){.hero{grid-template-columns:1fr;justify-items:center}.legend{width:100%;flex-direction:row;justify-content:space-around;text-align:center}.field{width:100px}.drow,.dhead{grid-template-columns:1fr 54px 54px}.tile .big{font-size:30px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.btn2{font:inherit;font-size:17px;border:0;border-radius:12px;padding:12px 16px;background:var(--card);color:var(--blue);cursor:pointer;flex:1;min-width:140px}
+.btn2.danger{color:var(--red)}
+.confirm{background:var(--card);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.confirm p{margin:0;font-size:15px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Barbarastraat 66</h1>
+  <p class="sub">Lent · Heleen &amp; Nicky</p>
+
+  <!-- OVERZICHT -->
+  <div class="view" id="v-overzicht">
+    <div class="hero">
+      <svg class="rings" viewBox="0 0 132 132" aria-hidden="true" id="rings"></svg>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="tiles" id="countTiles"></div>
+    <div class="nextcard" id="next"></div>
+
+    <div class="group">
+      <div class="ghead"><span>Uit de koopovereenkomst</span><span class="pill p-orange" style="text-transform:none">Concept</span></div>
+      <div class="list" id="facts"></div>
+      <p class="gfoot">Bron: concept koopovereenkomst van 15 oktober 2026 (NVM-model 2026).</p>
+    </div>
+
+    <div class="group">
+      <div class="ghead"><span>Datums</span></div>
+      <div class="list">
+        <div class="row"><div class="main"><label class="t" for="dK">Koopovereenkomst getekend</label><span class="d">Pas aan zodra jullie tekenen</span></div><input type="date" class="datein" id="dK"></div>
+        <div class="row"><div class="main"><label class="t" for="dV">Financieringsvoorbehoud</label><span class="d">Art. 15.1a</span></div><input type="date" class="datein" id="dV"></div>
+        <div class="row"><div class="main"><label class="t" for="dW">Bankgarantie / waarborgsom</label><span class="d">Art. 5.1</span></div><input type="date" class="datein" id="dW"></div>
+        <div class="row"><div class="main"><label class="t" for="dO">Overdracht bij notaris</label><span class="d">Art. 4.1</span></div><input type="date" class="datein" id="dO"></div>
+      </div>
+      <p class="gfoot">De tijdlijn en alle deadlines schuiven mee met deze datums.</p>
+    </div>
+
+    <div class="group">
+      <div class="ghead"><span>Notities</span></div>
+      <label for="notes" style="position:absolute;left:-9999px">Notities</label>
+      <textarea class="notes" id="notes" placeholder="Namen, telefoonnummers, vragen voor de adviseur…"></textarea>
+      <p class="gfoot">Wordt bewaard zodra je buiten het veld tikt.</p>
+    </div>
+
+    <div class="group">
+      <div class="ghead"><span>Back-up</span></div>
+      <div class="btnrow">
+        <button class="btn2" id="exportBtn" type="button">Back-up opslaan</button>
+        <button class="btn2" id="importBtn" type="button">Back-up terugzetten</button>
+      </div>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+      <button class="btn2 danger" id="resetBtn" type="button">Alles wissen</button>
+      <div class="confirm" id="resetConfirm" hidden>
+        <p>Weet je het zeker? Alle vinkjes, bedragen en notities op dit apparaat worden gewist.</p>
+        <div class="btnrow"><button class="btn2" id="resetNo" type="button">Annuleren</button><button class="btn2 danger" id="resetYes" type="button">Wissen</button></div>
+      </div>
+      <p class="gfoot">Alles wordt alleen op dit apparaat bewaard, in deze browser. Wil je het ook op een ander apparaat? Sla een back-up op en zet die daar terug.</p>
+    </div>
+  </div>
+
+  <!-- TIJDLIJN -->
+  <div class="view" id="v-tijdlijn" hidden>
+    <div class="vhead"><h2>Tijdlijn</h2><p class="sub">Van koopovereenkomst tot sleutel. Een mijlpaal is klaar als alle stappen zijn afgevinkt.</p></div>
+    <ol class="tl" id="tl"></ol>
+  </div>
+
+  <!-- STAPPEN -->
+  <div class="view" id="v-stappen" hidden>
+    <div class="vhead"><h2>Stappenplan</h2><p class="sub">Per fase, met de datum waarvoor het geregeld moet zijn.</p></div>
+    <div id="phases" style="display:flex;flex-direction:column;gap:22px"></div>
+  </div>
+
+  <!-- DOCUMENTEN -->
+  <div class="view" id="v-documenten" hidden>
+    <div class="vhead"><h2>Documenten</h2><p class="sub">Voor de hypotheekverstrekker. Check ook de lijst van jullie eigen adviseur.</p></div>
+    <div class="bars" id="pbars"></div>
+    <div class="group">
+      <div class="ghead"><span>Per persoon</span><span id="cPersonal"></span></div>
+      <div class="list"><div class="dhead"><span></span><span>Heleen</span><span>Nicky</span></div><div id="tPersonal"></div></div>
+    </div>
+    <div class="group">
+      <div class="ghead"><span>Samen en over de woning</span><span id="cShared"></span></div>
+      <div class="list" id="tShared"></div>
+    </div>
+  </div>
+
+  <!-- KOSTEN -->
+  <div class="view" id="v-kosten" hidden>
+    <div class="vhead"><h2>Kosten</h2><p class="sub">Grijze bedragen zijn een voorstel. Tik erop om het echte bedrag in te vullen.</p></div>
+    <div class="sumgrid" id="totals"></div>
+    <div class="group">
+      <div class="ghead"><span>Basis</span></div>
+      <div class="list">
+        <div class="row"><label class="main t" for="iKoop">Koopsom</label><input class="field" id="iKoop" inputmode="numeric" placeholder="614500"></div>
+        <div class="row"><label class="main t" for="iHyp">Hypotheek</label><input class="field" id="iHyp" inputmode="numeric" placeholder="614500"></div>
+        <div class="row"><label class="main t" for="iH35">Heleen jonger dan 35</label><input type="checkbox" class="switch" id="iH35"></div>
+        <div class="row"><label class="main t" for="iN35">Nicky jonger dan 35</label><input type="checkbox" class="switch" id="iN35"></div>
+      </div>
+    </div>
+    <div class="group">
+      <div class="ghead"><span>Kostenposten</span><span id="cCosts"></span></div>
+      <div class="list" id="costList"></div>
+      <p class="gfoot">Vink een post af als hij betaald is.</p>
+    </div>
+    <div class="group">
+      <div class="ghead"><span>Eigen kostenpost toevoegen</span></div>
+      <div class="list">
+        <div class="row"><input class="field wide" id="newName" placeholder="Omschrijving, bijv. vloer" aria-label="Omschrijving"><input class="field" id="newAmt" inputmode="numeric" placeholder="€ 0" aria-label="Bedrag"></div>
+        <div class="row"><label class="main t" for="newDed">Aftrekbaar</label><input type="checkbox" class="switch" id="newDed"></div>
+        <div class="row"><button class="addbtn" id="addBtn" type="button">Toevoegen</button></div>
+      </div>
+    </div>
+
+    <div class="vhead" style="margin-top:8px"><h2>Aftrek &amp; vrijstellingen</h2><p class="sub">Wat jullie terugkrijgen of niet hoeven te betalen (regels 2026).</p></div>
+    <div class="callout" id="starterCallout"></div>
+    <div class="info">
+      <div class="t"><span class="icon" style="background:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg></span>Aftrekbaar in de aangifte over 2026</div>
+      <p>Eenmalige kosten trek je af in het jaar dat je ze betaalt. Ze verlagen je belasting tegen maximaal 37,56%.</p>
+      <ul>
+        <li>Hypotheekadvies en bemiddeling</li>
+        <li>Notaris en kadaster voor de <b>hypotheekakte</b></li>
+        <li>Taxatiekosten</li>
+        <li>Bereidstellingsprovisie als je de rente-aanbieding moet verlengen. Let op: de overdracht is pas 1 februari, dus de offerte moet lang geldig zijn.</li>
+        <li>Hypotheekrente vanaf de overdracht</li>
+      </ul>
+    </div>
+    <div class="info">
+      <div class="t"><span class="icon" style="background:#8e8e93"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>Niet aftrekbaar</div>
+      <ul>
+        <li>Overdrachtsbelasting</li>
+        <li>Notaris en kadaster voor de <b>leveringsakte</b></li>
+        <li>Kosten van de bankgarantie</li>
+        <li>Makelaar, bouwkundige keuring, verhuizing, verbouwing</li>
+      </ul>
+    </div>
+    <div class="info">
+      <div class="t"><span class="icon" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></span>Goed om te weten</div>
+      <ul>
+        <li>De overdracht is op 1 februari 2027. De kosten die je bij de notaris betaalt vallen daardoor in 2027 en horen in de aangifte over 2027. Kosten die je nu al betaalt, zoals advies of taxatie, horen in 2026.</li>
+        <li>Jullie zijn samen eigenaar van de woning waar jullie allebei ingeschreven staan. Daardoor worden jullie fiscale partners en mogen jullie de aftrek vrij verdelen.</li>
+        <li>Vraag na de overdracht een voorlopige aanslag aan bij de Belastingdienst. Dan krijg je de renteaftrek per maand terug.</li>
+        <li>Over de WOZ-waarde tel je het eigenwoningforfait bij je inkomen op. Dat maakt de teruggave iets kleiner.</li>
+        <li>Je kunt maximaal 100% van de marktwaarde lenen. De kosten koper betalen jullie dus van eigen geld.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sync" id="sync">Laden…</p>
+</div>
+
+<nav class="tabbar" aria-label="Onderdelen"><div class="in" role="tablist">
+  <button class="tab" role="tab" data-tab="overzicht"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 11L12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></svg>Overzicht</button>
+  <button class="tab" role="tab" data-tab="tijdlijn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Tijdlijn</button>
+  <button class="tab" role="tab" data-tab="stappen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6.5l1.5 1.5L8 5.5M4 12.5l1.5 1.5L8 11.5M4 18.5l1.5 1.5L8 17.5M11 7h9M11 13h9M11 19h9"/></svg>Stappen</button>
+  <button class="tab" role="tab" data-tab="documenten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>Documenten</button>
+  <button class="tab" role="tab" data-tab="kosten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M15 8.5a4 4 0 100 7M7.5 11h5M7.5 13.5h5"/></svg>Kosten</button>
+</div></nav>
+
+<script>
+const DEFAULT_DATES = { K:"2026-10-15", V:"2026-11-30", W:"2026-12-07", O:"2027-02-01" };
+const DEFAULT_INPUTS = { koop:614500, hyp:614500, h35:true, n35:true };
+const DEDUCT_RATE = 0.3756, STARTER_LIMIT = 555000, NHG_LIMIT = 470000;
+
+const FACTS = [
+  ["Adres","Barbarastraat 66, 6663 ML Lent"],
+  ["Kadastraal","Lent A 4172 · 123 m²"],
+  ["Koopsom","€ 614.500 kosten koper"],
+  ["Financieringsvoorbehoud","€ 614.500 · uiterlijk 30 nov 2026"],
+  ["Bankgarantie of waarborgsom","€ 61.450 · uiterlijk 7 dec 2026"],
+  ["Overdracht","1 feb 2027"],
+  ["Notaris","De Woonnotaris, Nijmegen"],
+  ["Makelaar verkopers","Leonie Rutgers, ST Makelaars"],
+  ["Overige voorbehouden","Geen (geen NHG, keuring of fundering)"],
+];
+
+const MILESTONES = [
+  { id:"m1", t:"Koopovereenkomst getekend", d:D=>D.K },
+  { id:"m2", t:"Wettelijke bedenktijd voorbij", d:D=>add(D.K,3) },
+  { id:"m3", t:"Hypotheekaanvraag ingediend", d:D=>add(D.K,14) },
+  { id:"m4", t:"Taxatierapport bij de bank", d:D=>add(D.K,24) },
+  { id:"m5", t:"Bindend hypotheekaanbod getekend", d:D=>add(D.V,-3) },
+  { id:"m6", t:"Financieringsvoorbehoud verloopt", d:D=>D.V, key:true },
+  { id:"m7", t:"Bankgarantie bij De Woonnotaris", d:D=>D.W, key:true },
+  { id:"m8", t:"Hypotheekstukken bij de notaris", d:D=>add(D.O,-14) },
+  { id:"m9", t:"Aktes en nota van afrekening gecheckt", d:D=>add(D.O,-5) },
+  { id:"m10", t:"Verhuizing en nutsvoorzieningen geregeld", d:D=>add(D.O,-2) },
+  { id:"m11", t:"Eindinspectie, tekenen en sleutels", d:D=>D.O, key:true },
+];
+
+const PHASES = [
+  { t:"Direct na de koopovereenkomst", items:[
+    { id:"s1", m:"m1", t:"Koopovereenkomst getekend en kopie ontvangen", n:"Nu nog concept. Check vooral koopsom, datums en voorbehouden." },
+    { id:"s2", m:"m2", t:"Bedenktijd van 3 dagen verstreken", n:"Gaat in op de dag na ontvangst van de getekende kopie. Eindigt in het weekend? Dan de eerstvolgende werkdag." },
+    { id:"s4", m:"m3", t:"De Woonnotaris laten weten dat zij de akte passeren" },
+    { id:"s5", m:"m3", t:"Afspraak met hypotheekadviseur gepland" },
+  ]},
+  { t:"Hypotheek regelen", items:[
+    { id:"s6", m:"m3", t:"Alle documenten verzameld en aangeleverd", n:"Zie het tabblad Documenten." },
+    { id:"s7", m:"m3", t:"Hypotheekvorm, rentevaste periode en bank gekozen", n:"Kies een offerte die geldig blijft tot 1 februari, of reken op bereidstellingsprovisie." },
+    { id:"s8", m:"m3", t:"Hypotheekaanvraag ingediend" },
+    { id:"s9", m:"m4", t:"Taxatie uitgevoerd en rapport gevalideerd" },
+    { id:"s10", m:"m5", t:"Opstalverzekering geregeld per 1 februari" },
+    { id:"s11", m:"m5", t:"Overlijdensrisicoverzekering geregeld (als de bank die eist)" },
+    { id:"s12", m:"m5", t:"Bindend hypotheekaanbod ontvangen" },
+    { id:"s13", m:"m5", t:"Hypotheekaanbod getekend en teruggestuurd" },
+    { id:"s14", m:"m6", t:"Financiering rond vóór 30 november", n:"Lukt het niet? Ontbind schriftelijk bij ST Makelaars, uiterlijk di 1 december. Stuur een schriftelijke afwijzing van de bank mee (met bedrag en adres) en een kopie van de aanvraag." },
+  ]},
+  { t:"Bankgarantie en notaris", items:[
+    { id:"s15", m:"m7", t:"Bankgarantie van € 61.450 gesteld", n:"Of zelf storten op de derdenrekening van De Woonnotaris. Uiterlijk 7 december." },
+    { id:"s16", m:"m8", t:"Notaris heeft hypotheekopdracht van de bank ontvangen" },
+    { id:"s17", m:"m9", t:"Samenlevingscontract geregeld", n:"Jullie hebben er nog geen. Laat het bij de notaris opstellen, ook voor wat er bij overlijden met het huis gebeurt." },
+    { id:"s18", m:"m9", t:"Concept leveringsakte en hypotheekakte doorgelezen" },
+    { id:"s19", m:"m9", t:"Nota van afrekening gecontroleerd" },
+    { id:"s20", m:"m9", t:"Eigen geld overgemaakt naar de notaris" },
+  ]},
+  { t:"Verhuizing voorbereiden", items:[
+    { id:"s21", m:"m10", t:"Huur Vossenlaan 126a opgezegd", n:"Check je opzegtermijn, vaak een maand." },
+    { id:"s22", m:"m10", t:"Energie, water en internet aangemeld per 1 februari" },
+    { id:"s23", m:"m10", t:"Inboedelverzekering verhuisd" },
+    { id:"s24", m:"m10", t:"Verhuizing gepland" },
+  ]},
+  { t:"Overdrachtsdag", items:[
+    { id:"s25", m:"m11", t:"Eindinspectie gedaan", n:"Art. 6.5: jullie mogen de woning vlak voor het passeren bekijken." },
+    { id:"s26", m:"m11", t:"Aktes getekend, sleutels ontvangen", n:"Neem allebei een geldig ID mee." },
+    { id:"s27", m:"m11", t:"Meterstanden genoteerd en doorgegeven" },
+    { id:"s28", m:"m11", t:"Verhuizing doorgegeven aan gemeente Nijmegen", n:"Binnen 5 dagen na de verhuizing." },
+  ]},
+];
+
+const PEOPLE = ["Heleen","Nicky"];
+const PERSONAL_DOCS = [
+  { id:"p1", t:"Geldig identiteitsbewijs", n:"Voor- en achterkant" },
+  { id:"p2", t:"Werkgeversverklaring", n:"Getekend, niet ouder dan 3 maanden" },
+  { id:"p3", t:"Recente salarisstrook" },
+  { id:"p4", t:"Bankafschrift met salaris", n:"Zelfde maand als de salarisstrook" },
+  { id:"p5", t:"UWV-verzekeringsbericht", n:"Via Mijn UWV" },
+  { id:"p6", t:"Arbeidscontract of intentieverklaring", n:"Intentieverklaring bij tijdelijk contract" },
+  { id:"p7", t:"Bewijs van eigen geld", n:"Recent afschrift spaarrekening" },
+  { id:"p8", t:"Overzicht schulden en leningen", n:"DUO, creditcard, lease" },
+  { id:"p9", t:"Pensioenoverzicht", n:"mijnpensioenoverzicht.nl" },
+];
+const SHARED_DOCS = [
+  { id:"g1", t:"Getekende koopovereenkomst" },
+  { id:"g2", t:"Taxatierapport" },
+  { id:"g3", t:"Getekend hypotheekaanbod" },
+  { id:"g4", t:"Polis opstalverzekering" },
+  { id:"g5", t:"Bewijs bankgarantie of waarborgsom" },
+  { id:"g6", t:"Huurverklaring Vossenlaan", n:"Of bewijs van opzegging" },
+  { id:"g7", t:"Samenlevingscontract", n:"Als het klaar is" },
+  { id:"g8", t:"Bouwkundig rapport", n:"Alleen als jullie laten keuren" },
+  { id:"g9", t:"Energielabel", n:"Zit bij de koopovereenkomst" },
+];
+
+const COSTS = [
+  { id:"c1", t:"Overdrachtsbelasting", ded:false, s:I=>{
+      if(I.koop>STARTER_LIMIT) return Math.round(I.koop*0.02);
+      return Math.round(I.koop/2*((I.h35?0:0.02)+(I.n35?0:0.02))); },
+    n:I=> I.koop>STARTER_LIMIT ? "2%: koopsom boven € 555.000, dus geen startersvrijstelling" : "Startersvrijstelling per koper onder 35" },
+  { id:"c2", t:"Notaris leveringsakte", ded:false, s:()=>900 },
+  { id:"c3", t:"Notaris hypotheekakte", ded:true, s:()=>700 },
+  { id:"c4", t:"Kadaster levering", ded:false, s:()=>165 },
+  { id:"c5", t:"Kadaster hypotheek", ded:true, s:()=>165 },
+  { id:"c6", t:"Hypotheekadvies", ded:true, s:()=>3000 },
+  { id:"c7", t:"Taxatie", ded:true, s:()=>750 },
+  { id:"c8", t:"NHG", ded:true, s:I=> I.hyp>0 && I.hyp<=NHG_LIMIT ? Math.round(I.hyp*0.004) : 0, n:I=> I.hyp>NHG_LIMIT ? "Niet mogelijk boven € 470.000" : "0,4% van de hypotheek" },
+  { id:"c9", t:"Bankgarantie", ded:false, s:I=>Math.round(I.koop*0.1*0.01), n:()=>"Ca. 1% van € 61.450. Zet op 0 als jullie zelf storten" },
+  { id:"c10", t:"Samenlevingscontract", ded:false, s:()=>600 },
+  { id:"c11", t:"Bouwkundige keuring", ded:false, s:()=>450, n:()=>"Optioneel, geen voorbehoud in contract" },
+  { id:"c12", t:"Verhuizing", ded:false, s:()=>1000 },
+];
+
+let dates={...DEFAULT_DATES}, checks={}, inputs={...DEFAULT_INPUTS}, costs={}, custom={}, notes="";
+let readOnly=false, tab="overzicht";
+
+function parse(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
+function iso(dt){ return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0"); }
+function add(s,n){ const d=parse(s); d.setDate(d.getDate()+n); return iso(d); }
+const fmt=new Intl.DateTimeFormat("nl-NL",{day:"numeric",month:"short"});
+const fmtY=new Intl.DateTimeFormat("nl-NL",{day:"numeric",month:"short",year:"numeric"});
+const fmtLong=new Intl.DateTimeFormat("nl-NL",{weekday:"long",day:"numeric",month:"long"});
+const nice=s=>fmt.format(parse(s));
+const todayIso=()=>iso(new Date());
+const daysBetween=(a,b)=>Math.round((parse(b)-parse(a))/864e5);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const euro=new Intl.NumberFormat("nl-NL",{style:"currency",currency:"EUR",maximumFractionDigits:0});
+function money(s){ if(s===null||s===undefined) return null; const t=String(s).replace(/[^\d,.-]/g,"").replace(/\./g,"").replace(",","."); if(t==="") return null; const n=Number(t); return isFinite(n)?Math.round(n):null; }
+const shown=n=>n===null||n===undefined?"":String(n);
+const allSteps=PHASES.flatMap(p=>p.items);
+const msDate=id=>MILESTONES.find(m=>m.id===id).d(dates);
+const $=id=>document.getElementById(id);
+
+function render(){
+  const a=document.activeElement, aid=a&&a.id, aval=a&&("value" in a)&&a.type!=="checkbox"?a.value:null;
+  let s0=null,s1=null; try{ s0=a.selectionStart; s1=a.selectionEnd; }catch(e){}
+  const st=computeStats();
+  renderOverview(st); renderTimeline(st); renderSteps(); renderDocs(); renderCosts();
+  if(aid){ const el=$(aid); if(el && el!==a){ if(aval!==null) el.value=aval; el.focus(); try{ if(s0!==null) el.setSelectionRange(s0,s1); }catch(e){} } }
+}
+
+function computeStats(){
+  const T=todayIso();
+  const ms=MILESTONES.map(m=>{
+    const steps=allSteps.filter(s=>s.m===m.id), date=m.d(dates);
+    const done=steps.length>0 && steps.every(s=>checks[s.id]); const dl=daysBetween(T,date);
+    const st=done?"done":date<T?"late":dl<=7?"soon":"later";
+    return {...m,steps,date,done,st,dl};
+  });
+  const stepsDone=allSteps.filter(s=>checks[s.id]).length;
+  const pDone=p=>PERSONAL_DOCS.filter(d=>checks[d.id+"_"+p]).length;
+  const sDone=SHARED_DOCS.filter(d=>checks[d.id]).length;
+  const docTotal=PERSONAL_DOCS.length*2+SHARED_DOCS.length, docDone=pDone("Heleen")+pDone("Nicky")+sDone;
+  const c=costRows(); const paidN=c.filter(r=>r.paid).length;
+  const late=allSteps.filter(s=>!checks[s.id] && msDate(s.m)<T);
+  return {T,ms,stepsDone,pDone,sDone,docTotal,docDone,costN:c.length,paidN,late};
+}
+
+function ring(r,pct,color){
+  const C=2*Math.PI*r, off=C*(1-Math.min(pct,1));
+  return `<circle cx="66" cy="66" r="${r}" fill="none" stroke="${color}" stroke-opacity=".2" stroke-width="14"/>
+  <circle cx="66" cy="66" r="${r}" fill="none" stroke="${color}" stroke-width="14" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${off}" transform="rotate(-90 66 66)" style="transition:stroke-dashoffset .6s"/>`;
+}
+
+function renderOverview(S){
+  const rs=[["Stappen",S.stepsDone,allSteps.length,"var(--pink)"],["Documenten",S.docDone,S.docTotal,"var(--green)"],["Kosten betaald",S.paidN,S.costN,"var(--teal)"]];
+  $("rings").innerHTML = ring(57,rs[0][1]/rs[0][2],rs[0][3])+ring(41,rs[1][1]/rs[1][2],rs[1][3])+ring(25,S.costN?rs[2][1]/rs[2][2]:0,rs[2][3]);
+  $("legend").innerHTML = rs.map(([k,n,t,c])=>`<div class="lg"><div class="k">${k}</div><div class="n" style="color:${c}">${n}<small>/${t}</small></div></div>`).join("");
+  const toV=daysBetween(S.T,dates.V), toO=daysBetween(S.T,dates.O);
+  const tile=(lab,days,color,date)=>`<div class="tile"><span class="k" style="color:${color}">${lab}</span><span class="big">${days>0?days:days===0?"Vandaag":"✓"}${days>0?"<small>dagen</small>":""}</span><span class="d">${fmtY.format(parse(date))}</span></div>`;
+  $("countTiles").innerHTML = tile("Financiering rond",toV,"var(--red)",dates.V)+tile("Sleutel",toO,"var(--blue)",dates.O);
+  const nextM=S.ms.find(m=>!m.done && m.date>=S.T)||S.ms.find(m=>!m.done);
+  const nextS=nextM?nextM.steps.find(s=>!checks[s.id]):null;
+  $("next").innerHTML = `<span class="k">Vandaag · ${fmtLong.format(parse(S.T))}</span>`+
+    (S.late.length?`<span class="warn">${S.late.length} stap${S.late.length===1?"":"pen"} achter op schema</span>`:"")+
+    (nextM?`<span class="t">Volgende: ${esc(nextM.t)} · ${nice(nextM.date)}</span>${nextS?`<span class="k">Eerst: ${esc(nextS.t)}</span>`:""}`:`<span class="t">Alles geregeld 🎉</span>`);
+  $("facts").innerHTML = FACTS.map(([k,v])=>`<div class="row"><div class="main"><span class="d">${esc(k)}</span><span class="t">${esc(v)}</span></div></div>`).join("");
+  for(const k of ["K","V","W","O"]){ const el=$("d"+k); if(document.activeElement!==el) el.value=dates[k]; el.disabled=readOnly; }
+  const nEl=$("notes"); if(document.activeElement!==nEl) nEl.value=notes; nEl.disabled=readOnly;
+}
+
+function renderTimeline(S){
+  let html="", placed=false;
+  const todayRow=`<li class="today"><div class="date"><b>${parse(S.T).getDate()}</b>${fmt.format(parse(S.T)).split(" ")[1]}</div><div class="rail"><span class="dot"></span></div><div class="body"><span class="t">Hier staan we nu</span><span class="meta">${S.stepsDone} van ${allSteps.length} stappen geregeld</span></div></li>`;
+  S.ms.forEach(m=>{
+    if(!placed && m.date>S.T){ html+=todayRow; placed=true; }
+    const n=m.steps.filter(s=>checks[s.id]).length;
+    const pill = m.done?`<span class="pill p-green">Geregeld</span>`: m.st==="late"?`<span class="pill p-red">Achter</span>`: m.st==="soon"?`<span class="pill p-orange">${m.dl===0?"Vandaag":"Over "+m.dl+" d"}</span>`:`<span class="pill p-grey">Over ${m.dl} d</span>`;
+    const d=parse(m.date);
+    html+=`<li class="s-${m.st} ${m.key?"key":""}"><div class="date"><b>${d.getDate()}</b>${fmt.format(d).split(" ")[1]}${d.getFullYear()!==2026?" ’"+String(d.getFullYear()).slice(2):""}</div><div class="rail"><span class="dot"></span></div><div class="body"><span class="t">${esc(m.t)}</span><span class="meta">${pill}<span>${n}/${m.steps.length} stappen</span></span></div></li>`;
+  });
+  if(!placed) html+=todayRow;
+  $("tl").innerHTML=html;
+}
+
+function renderSteps(){
+  const T=todayIso();
+  $("phases").innerHTML = PHASES.map(p=>{
+    const done=p.items.filter(i=>checks[i.id]).length;
+    return `<div class="group"><div class="ghead"><span>${esc(p.t)}</span><span>${done}/${p.items.length}</span></div><div class="list">${
+      p.items.map(i=>{
+        const due=msDate(i.m), ok=!!checks[i.id], late=!ok && due<T;
+        return `<div class="row ${ok?"done":""}"><input type="checkbox" class="cb" id="${i.id}" data-k="${i.id}" ${ok?"checked":""} ${readOnly?"disabled":""}><div class="main"><label class="t" for="${i.id}">${esc(i.t)}</label>${i.n?`<span class="d">${esc(i.n)}</span>`:""}</div><span class="pill ${ok?"p-green":late?"p-red":"p-grey"}">${ok?"Klaar":nice(due)}</span></div>`;
+      }).join("")}</div></div>`;
+  }).join("");
+}
+
+function renderDocs(){
+  const pDone=p=>PERSONAL_DOCS.filter(d=>checks[d.id+"_"+p]).length;
+  const sDone=SHARED_DOCS.filter(d=>checks[d.id]).length;
+  $("tPersonal").innerHTML = PERSONAL_DOCS.map(d=>{
+    const all=PEOPLE.every(p=>checks[d.id+"_"+p]);
+    return `<div class="drow ${all?"done":""}"><div class="main"><span class="t">${esc(d.t)}</span>${d.n?`<span class="d" style="font-size:13px;color:var(--label2)">${esc(d.n)}</span>`:""}</div>${
+      PEOPLE.map(p=>`<div class="cbw"><input type="checkbox" class="cb" aria-label="${esc(d.t)}, ${p}" data-k="${d.id}_${p}" ${checks[d.id+"_"+p]?"checked":""} ${readOnly?"disabled":""}></div>`).join("")}</div>`;
+  }).join("");
+  $("tShared").innerHTML = SHARED_DOCS.map(d=>`<div class="row ${checks[d.id]?"done":""}"><input type="checkbox" class="cb" id="${d.id}" data-k="${d.id}" ${checks[d.id]?"checked":""} ${readOnly?"disabled":""}><div class="main"><label class="t" for="${d.id}">${esc(d.t)}</label>${d.n?`<span class="d">${esc(d.n)}</span>`:""}</div></div>`).join("");
+  $("cPersonal").textContent=`${pDone("Heleen")+pDone("Nicky")}/${PERSONAL_DOCS.length*2}`;
+  $("cShared").textContent=`${sDone}/${SHARED_DOCS.length}`;
+  const bar=(name,n,t)=>`<div class="tile"><span class="k">${name}</span><span class="big" style="font-size:24px">${n}<small>/${t}</small></span><div class="pbar"><span style="width:${Math.round(n/t*100)}%"></span></div></div>`;
+  $("pbars").innerHTML = bar("Heleen",pDone("Heleen"),PERSONAL_DOCS.length)+bar("Nicky",pDone("Nicky"),PERSONAL_DOCS.length)+bar("Samen",sDone,SHARED_DOCS.length);
+}
+
+function calcInputs(){ return {koop:inputs.koop||0, hyp:inputs.hyp||0, h35:inputs.h35, n35:inputs.n35}; }
+function costRows(){
+  const I=calcInputs();
+  const rows=COSTS.map(c=>{ const st=costs[c.id]||{}; const sugg=c.s(I); const own=st.amount!==null&&st.amount!==undefined; return {id:c.id,t:c.t,ded:c.ded,n:c.n?c.n(I):"",sugg,amt:own?st.amount:sugg,own,paid:!!st.paid,custom:false}; });
+  const crows=Object.entries(custom).sort((a,b)=>(a[1].created||0)-(b[1].created||0)).map(([id,c])=>({id,t:c.name||"Kostenpost",ded:!!c.ded,n:"",amt:c.amount||0,own:true,paid:!!c.paid,custom:true}));
+  return [...rows,...crows];
+}
+
+function renderCosts(){
+  const act=document.activeElement, I=calcInputs();
+  for(const [id,v] of [["iKoop",inputs.koop],["iHyp",inputs.hyp]]){ const el=$(id); if(act!==el) el.value=shown(v); el.disabled=readOnly; }
+  $("iH35").checked=!!inputs.h35; $("iN35").checked=!!inputs.n35;
+  ["iH35","iN35","newName","newAmt","newDed","addBtn"].forEach(id=>$(id).disabled=readOnly);
+  const all=costRows();
+  $("costList").innerHTML = all.map(r=>{
+    const tag = r.id==="c1"&&r.amt===0?`<span class="pill p-orange">Vrijgesteld</span>`: r.ded?`<span class="pill p-green">Aftrekbaar</span>`:"";
+    return `<div class="row cost ${r.paid?"done":""}"><input type="checkbox" class="cb" aria-label="${esc(r.t)} betaald" data-paid="${r.id}" data-custom="${r.custom?1:""}" ${r.paid?"checked":""} ${readOnly?"disabled":""}>
+      <div class="main"><span class="t">${esc(r.t)} ${tag}</span>${r.n?`<span class="d">${esc(r.n)}</span>`:""}</div>
+      <div class="right"><input class="field" id="amt_${r.id}" aria-label="Bedrag ${esc(r.t)}" inputmode="numeric" data-amt="${r.id}" data-custom="${r.custom?1:""}" value="${r.custom||r.own?shown(r.amt):""}" placeholder="${r.custom?"€ 0":euro.format(r.sugg)}" ${readOnly?"disabled":""}>
+      ${r.custom?(readOnly?"":`<button class="delbtn" type="button" data-del="${r.id}">Verwijder</button>`):(r.own?`<span class="sugg">voorstel ${euro.format(r.sugg)}</span>`:`<span class="sugg">voorstel</span>`)}</div></div>`;
+  }).join("");
+  const total=all.reduce((s,r)=>s+r.amt,0), ded=all.filter(r=>r.ded).reduce((s,r)=>s+r.amt,0), paid=all.filter(r=>r.paid).reduce((s,r)=>s+r.amt,0);
+  const eigen=Math.max(I.koop+total-I.hyp,0);
+  $("cCosts").textContent=`${all.filter(r=>r.paid).length}/${all.length} betaald`;
+  const t=(k,v,cls="")=>`<div class="tile ${cls}"><span class="k" style="color:var(--label2);font-weight:500">${k}</span><span class="big">${v}</span></div>`;
+  $("totals").innerHTML = t("Totale kosten",euro.format(total))+t("Eigen geld nodig",euro.format(eigen))+t("Nog te betalen",euro.format(total-paid))+t("Terug via belasting","± "+euro.format(Math.round(ded*DEDUCT_RATE)),"accent");
+  $("starterCallout").innerHTML = I.koop>STARTER_LIMIT
+    ? `<b>Startersvrijstelling geldt niet.</b> Jullie zijn allebei jonger dan 35, maar de koopsom van ${euro.format(I.koop)} ligt boven de grens van € 555.000. Daarom is de overdrachtsbelasting 2% van de hele koopsom: ${euro.format(Math.round(I.koop*0.02))}. Boven de grens vervalt de vrijstelling helemaal, ook voor het deel eronder.`
+    : `<b>Startersvrijstelling.</b> Onder de € 555.000 betaalt elke koper jonger dan 35 geen overdrachtsbelasting over de eigen helft. Je tekent hiervoor een verklaring bij de notaris.`;
+}
+
+// Saving: everything lives in this browser's localStorage
+const KEY="ons-huis-barbarastraat-v1";
+function syncLabel(t){ $("sync").textContent=t; }
+function applyState(s){ checks=s.checks||{}; dates={...DEFAULT_DATES,...(s.dates||{})}; inputs={...DEFAULT_INPUTS,...(s.inputs||{})}; costs=s.costs||{}; custom=s.custom||{}; notes=s.notes||""; }
+function loadLocal(){ try{ const s=JSON.parse(localStorage.getItem(KEY)||"null"); if(s) applyState(s); }catch(e){ syncLabel("Kon opgeslagen gegevens niet lezen."); } }
+function snapshot(){ return {app:"ons-huis",version:1,saved:new Date().toISOString(),checks,dates,inputs,costs,custom,notes}; }
+function saveLocal(){
+  try{ localStorage.setItem(KEY,JSON.stringify(snapshot())); syncLabel("Opgeslagen op dit apparaat · "+new Date().toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})); }
+  catch(e){ syncLabel("Opslaan mislukt. Staat privé-modus aan? Dan bewaart de browser niets."); }
+}
+function put(){ saveLocal(); }
+
+// Back-up: save to a file and restore from one
+$("exportBtn").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify(snapshot(),null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="ons-huis-backup-"+todayIso()+".json"; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000);
+  syncLabel("Back-up opgeslagen in je downloads.");
+});
+$("importBtn").addEventListener("click",()=>$("importFile").click());
+$("importFile").addEventListener("change",async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  try{ const s=JSON.parse(await f.text()); if(s.app!=="ons-huis") throw new Error();
+    applyState(s); saveLocal(); render(); syncLabel("Back-up teruggezet."); }
+  catch(err){ syncLabel("Dit bestand is geen back-up van deze app."); }
+  e.target.value="";
+});
+$("resetBtn").addEventListener("click",()=>{ $("resetConfirm").hidden=false; $("resetBtn").hidden=true; });
+$("resetNo").addEventListener("click",()=>{ $("resetConfirm").hidden=true; $("resetBtn").hidden=false; });
+$("resetYes").addEventListener("click",()=>{ applyState({}); try{ localStorage.removeItem(KEY); }catch(e){} render(); $("resetConfirm").hidden=true; $("resetBtn").hidden=false; syncLabel("Alles gewist."); });
+
+document.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.dataset.k){ const k=el.dataset.k; if(el.checked) checks[k]=true; else delete checks[k]; render(); put("checks/"+k,{done:el.checked}); }
+  if(el.classList.contains("datein") && el.value){ dates[el.id.slice(1)]=el.value; render(); put("settings/dates",{...dates}); }
+  if(el.id==="iKoop"||el.id==="iHyp"){ inputs[el.id==="iKoop"?"koop":"hyp"]=money(el.value)??0; render(); put("settings/inputs",{...inputs}); }
+  if(el.id==="iH35"||el.id==="iN35"){ inputs[el.id==="iH35"?"h35":"n35"]=el.checked; render(); put("settings/inputs",{...inputs}); }
+  if(el.dataset.paid){ const id=el.dataset.paid;
+    if(el.dataset.custom){ custom[id]={...custom[id],paid:el.checked}; render(); put("custom/"+id,{...custom[id]}); }
+    else { costs[id]={...(costs[id]||{}),paid:el.checked}; render(); put("costs/"+id,{amount:costs[id].amount??null,paid:!!costs[id].paid}); } }
+  if(el.dataset.amt){ const id=el.dataset.amt, v=money(el.value);
+    if(el.dataset.custom){ custom[id]={...custom[id],amount:v??0}; render(); put("custom/"+id,{...custom[id]}); }
+    else { costs[id]={...(costs[id]||{}),amount:v}; render(); put("costs/"+id,{amount:v,paid:!!costs[id].paid}); } }
+  if(el.id==="notes"){ notes=el.value; put("settings/notes",{text:notes}); }
+});
+document.addEventListener("click",e=>{
+  const d=e.target.closest("[data-del]");
+  if(d){ const id=d.dataset.del; delete custom[id]; render(); put("custom/"+id,null,true); }
+  if(e.target.id==="addBtn"){
+    const name=$("newName").value.trim(); if(!name){ $("newName").focus(); return; }
+    const id="k"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    custom[id]={name,amount:money($("newAmt").value)??0,ded:$("newDed").checked,paid:false,created:Date.now()};
+    $("newName").value=""; $("newAmt").value=""; $("newDed").checked=false;
+    render(); put("custom/"+id,{...custom[id]});
+  }
+  const t=e.target.closest(".tab"); if(t) setTab(t.dataset.tab,true);
+});
+
+function setTab(name,user){
+  tab=name;
+  document.querySelectorAll(".view").forEach(v=>v.hidden = v.id!=="v-"+name);
+  document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected", b.dataset.tab===name?"true":"false"));
+  try{ localStorage.setItem("huis-tab",name); }catch(e){}
+  if(user) window.scrollTo({top:0});
+}
+let startTab="overzicht";
+const h=(location.hash||"").slice(1);
+if(["overzicht","tijdlijn","stappen","documenten","kosten"].includes(h)) startTab=h;
+else { try{ startTab=localStorage.getItem("huis-tab")||"overzicht"; }catch(e){} }
+
+syncLabel("Opgeslagen op dit apparaat");
+loadLocal(); setTab(startTab); render();
+
+// Notes: also save while typing (after a short pause)
+let noteTimer=null;
+$("notes").addEventListener("input",e=>{ notes=e.target.value; clearTimeout(noteTimer); noteTimer=setTimeout(saveLocal,600); });
+
+// Keep the tracker fresh when the app comes back to the front on a new day
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) render(); });
+
+// Ask the browser not to clear our storage, and work offline
+if(navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(()=>{}); }
+if("serviceWorker" in navigator){ window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
+</script>
+</body>
+</html>
